@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { farmersAPI, suppliersAPI, milkEntriesAPI, fleetManagementAPI, deliveriesAPI, processingUnitsAPI, productionBatchesAPI, qualityControlAPI, maintenanceAPI, retailersAPI, salesAPI, inventoryAPI, employeeAPI, paymentsAPI, billsAPI, labQualityTestsAPI, reviewsAPI, farmerFeedbackAPI, messagesAPI, announcementsAPI, groupMessagesAPI,
 complianceRecordsAPI, certificationsAPI, auditsAPI, documentsAPI} from '../services/api';
+import { io } from 'socket.io-client'; 
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+const safeArray = (maybeArray) => Array.isArray(maybeArray) ? maybeArray : [];
+const safeObject = (maybeObject) => maybeObject && typeof maybeObject === 'object' ? maybeObject : {};
 
 const AppContext = createContext();
 
@@ -72,79 +76,8 @@ export const AppProvider = ({ children }) => {
 
   // ORIGINAL: Shared Inventory Data (unchanged)
   const [inventoryItems, setInventoryItems] = useState([
-    { code: 'RMK0001', name: 'Fresh Toned Milk', category: 'Raw Milk', quantity: '1200', unit: 'Liters', minStock: '500', maxStock: '2000', supplier: 'Dairy Farm Co.', location: 'Cold Storage', status: 'In Stock', lastUpdated: '2025-06-09' },
-    { code: 'PKG0001', name: 'PET Bottles 500ml', category: 'Packaging Materials', quantity: '50', unit: 'Boxes', minStock: '100', maxStock: '500', supplier: 'Packaging Solutions Ltd.', location: 'Warehouse A', status: 'Low Stock', lastUpdated: '2025-06-08' }
   ]);
 
-  // ORIGINAL: Quality Tests Data (unchanged)
-  const [qualityTests, setQualityTests] = useState([
-    { 
-      id: 'QT001', 
-      batchId: 'BATCH0001', 
-      sampleId: 'SAMPLE000001', 
-      farmerId: 'FARM0001', 
-      farmerName: 'Rajesh Kumar', 
-      testDate: '2025-06-15', 
-      testType: 'Routine Test', 
-      fatContent: '4.2', 
-      proteinContent: '3.4', 
-      lactoseContent: '4.8', 
-      snfContent: '8.5', 
-      phLevel: '6.7', 
-      bacteriaCount: '15000', 
-      adulteration: 'None Detected', 
-      overallGrade: 'A+', 
-      status: 'Completed', 
-      remarks: 'Excellent quality milk', 
-      testedBy: 'Dr. Priya Sharma' 
-    },
-    { 
-      id: 'QT002', 
-      batchId: 'BATCH0002', 
-      sampleId: 'SAMPLE000002', 
-      farmerId: 'FARM0002', 
-      farmerName: 'Priya Sharma', 
-      testDate: '2025-06-16', 
-      testType: 'Routine Test', 
-      fatContent: '3.8', 
-      proteinContent: '3.2', 
-      lactoseContent: '4.6', 
-      snfContent: '8.2', 
-      phLevel: '6.8', 
-      bacteriaCount: '18000', 
-      adulteration: 'None Detected', 
-      overallGrade: 'A', 
-      status: 'Completed', 
-      remarks: 'Good quality milk', 
-      testedBy: 'Dr. Anita Singh' 
-    },
-    { 
-      id: 'QT003', 
-      batchId: 'BATCH0003', 
-      sampleId: 'SAMPLE000003', 
-      farmerId: 'FARM0001', 
-      farmerName: 'Rajesh Kumar', 
-      testDate: '2025-06-17', 
-      testType: 'Special Test', 
-      fatContent: '3.5', 
-      proteinContent: '3.0', 
-      lactoseContent: '4.4', 
-      snfContent: '8.0', 
-      phLevel: '6.9', 
-      bacteriaCount: '22000', 
-      adulteration: 'None Detected', 
-      overallGrade: 'B', 
-      status: 'Completed', 
-      remarks: 'Average quality', 
-      testedBy: 'Dr. Priya Sharma' 
-    }
-  ]);
-
-  
-
-  const [qualityChecksData, setQualityChecksData] = useState([
-    { batchId: 'B001', unitId: 'PU0001', testDate: '2025-06-05', parameters: { fat: '3.5', protein: '3.2', moisture: '87.5', ph: '6.7' }, result: 'Pass', inspector: 'Dr. Anita' }
-  ]);
 
   const [maintenanceRecordsData, setMaintenanceRecordsData] = useState([
     { unitId: 'PU0001', date: '2025-06-03', type: 'Preventive', description: 'Regular cleaning and calibration', cost: '5000', technician: 'Suresh Tech', status: 'Completed' }
@@ -244,12 +177,6 @@ const [employees, setEmployees] = useState([
   }
 ]);
 
-
-  // ORIGINAL: Shared Reviews Data (unchanged)
-  // const [reviews, setReviews] = useState([
-  //   { id: 'REV001', customerName: 'Rajesh Kumar', customerEmail: 'rajesh@email.com', category: 'Product Quality', rating: 5, subject: 'Excellent milk quality', comment: 'The milk quality is consistently excellent. Very satisfied with the freshness and taste.', date: '2025-06-08', status: 'Responded' }
-  // ]);
-
   // ORIGINAL: Employee Satisfaction Data (unchanged)
   const [employeeData, setEmployeeData] = useState({
     surveys: [
@@ -314,6 +241,50 @@ const [employees, setEmployees] = useState([
       unit: 'kWh' 
     }
   });
+
+const activeInventoryItems = useMemo(
+  () => (inventoryRecords.length ? inventoryRecords : inventoryItems),
+  [inventoryRecords, inventoryItems]
+);
+
+const inventoryStats = useMemo(() => ({
+  totalItems: activeInventoryItems.length,
+  totalQuantity: activeInventoryItems.reduce(
+    (sum, i) => sum + parseFloat(i.quantity || 0), 0),
+}), [activeInventoryItems]);
+
+
+  /* ---------------------------------------------------------------------
+   Socket.IO — one connection that every component can reuse
+------------------------------------------------------------------------*/
+const socket = React.useMemo(() => io(SOCKET_URL, { transports: ['websocket'] }), []);
+
+/* Incoming events → keep local state in sync with 3001 dashboard */
+useEffect(() => {
+  socket.on('farmer:created',   ({ data }) => setFarmers(prev => [data, ...prev]));
+  socket.on('farmer:updated',   ({ data }) => setFarmers(prev => prev.map(f => f.id === data.id ? data : f)));
+  socket.on('farmer:deleted',   ({ id   }) => setFarmers(prev => prev.filter(f => f.id !== id)));
+  return () => socket.disconnect();
+}, []);
+
+socket.on('supplier:created', ({ data }) => {
+  if (data && Array.isArray(suppliers)) {
+    setSuppliers(prev => [data, ...safeArray(prev)]);
+  }
+});
+
+socket.on('supplier:updated', ({ data }) => {
+  if (data && Array.isArray(suppliers)) {
+    setSuppliers(prev => safeArray(prev).map(s => s.id === data.id ? data : s));
+  }
+});
+
+socket.on('supplier:deleted', ({ data }) => {
+  if (data && data.id && Array.isArray(suppliers)) {
+    setSuppliers(prev => safeArray(prev).filter(s => s.id !== data.id));
+  }
+});
+
 
   // Load data from database on component mount
   useEffect(() => {
@@ -672,6 +643,7 @@ const deleteDelivery = async (id) => {
           joinDate: response.data.join_date ? new Date(response.data.join_date).toISOString().split('T')[0] : ''
         };
         setFarmers(prev => [newFarmer, ...prev]);
+        socket.emit('farmer:created', { data: newFarmer });
         return response;
       }
     } catch (error) {
@@ -714,6 +686,7 @@ const deleteDelivery = async (id) => {
           updated[index] = updatedFarmer;
           return updated;
         });
+        socket.emit('farmer:updated', { data: updatedFarmer });
         return response;
       }
     } catch (error) {
@@ -737,6 +710,7 @@ const deleteDelivery = async (id) => {
     console.log('Delete response:', res);
     if (res?.success) {
       setFarmers(prev => prev.filter((_, i) => i !== index));
+      socket.emit('farmer:deleted', { id });
     } else {
       throw new Error(res.data?.message || 'Delete failed');
     }
@@ -776,6 +750,7 @@ const deleteDelivery = async (id) => {
           joinDate: response.data.join_date ? new Date(response.data.join_date).toISOString().split('T')[0] : ''
         };
         setSuppliers(prev => [newSupplier, ...prev]);
+        socket.emit('supplier:created', { data: newSupplier });
         return response;
       }
     } catch (error) {
@@ -816,6 +791,7 @@ const deleteDelivery = async (id) => {
           updated[index] = updatedSupplier;
           return updated;
         });
+        socket.emit('supplier:updated', { data: updatedSupplier });
         return response;
       }
     } catch (error) {
@@ -833,6 +809,7 @@ const deleteDelivery = async (id) => {
       const supplierId = suppliers[index].id;
       await suppliersAPI.delete(supplierId);
       setSuppliers(prev => prev.filter((_, i) => i !== index));
+      socket.emit('supplier:deleted', { id: supplierId });
     } catch (error) {
       setSuppliers(prev => prev.filter((_, i) => i !== index));
       throw error;
@@ -3106,15 +3083,13 @@ const deleteDocumentFromDB = async (documentId) => {
     addFleetRecord,
     updateFleetRecord,
     deleteFleetRecord,
-   // Inventory
+    // Inventory
     inventoryItems,
     setInventoryItems,
     addInventoryItem,
     updateInventoryItem,
     deleteInventoryItem,
     // Quality Tests
-    qualityTests,
-    setQualityTests,
     generateQualityDistribution,
     // Processing Units
     processingUnits,
@@ -3130,8 +3105,6 @@ const deleteDocumentFromDB = async (documentId) => {
     addProductionBatch,
     updateProductionBatch,
     deleteProductionBatch,
-    qualityChecksData,
-    setQualityChecksData,
     maintenanceRecordsData,
     setMaintenanceRecordsData,
     // Logistics
@@ -3310,6 +3283,9 @@ const deleteDocumentFromDB = async (documentId) => {
     generateNetworkGrowthData,
     // Calculated Metrics
     calculateSustainabilityIndex,
+    socket,
+    activeInventoryItems,
+    inventoryStats,
   };
 
   return (

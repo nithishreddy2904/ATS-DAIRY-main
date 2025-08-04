@@ -37,10 +37,7 @@ const FarmersSuppliers = () => {
   // DEBUG CODE - ADD THIS SECTION
   const context = useAppContext();
   
-  console.log('🔍 Context object:', context);
-  console.log('🔍 addFarmer function:', context.addFarmer);
-  console.log('🔍 Type of addFarmer:', typeof context.addFarmer);
-  console.log('🔍 Available context methods:', Object.keys(context));
+  
   
   // Check if addFarmer exists
   if (!context.addFarmer) {
@@ -872,7 +869,7 @@ const FarmersSuppliers = () => {
               </form>
             </Paper>
 
-            <Typography variant="h5" fontWeight="bold" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+            {/* <Typography variant="h5" fontWeight="bold" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ bgcolor: '#2196f3', mr: 2, width: 32, height: 32 }}>👥</Avatar>
               Registered Farmers ({farmers.length} total)
             </Typography>
@@ -947,11 +944,11 @@ const FarmersSuppliers = () => {
                   )}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </>
         )}
 
-        {/* Suppliers Tab */}
+        
         {tab === 1 && (
           <>
             <Paper elevation={6} sx={{ 
@@ -1081,12 +1078,12 @@ const FarmersSuppliers = () => {
               </form>
             </Paper>
 
-            <Typography variant="h5" fontWeight="bold" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+            {/* <Typography variant="h5" fontWeight="bold" sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
               <Avatar sx={{ bgcolor: '#4caf50', mr: 2, width: 32, height: 32 }}>🏢</Avatar>
               Registered Suppliers
-            </Typography>
+            </Typography> */}
 
-            <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden', boxShadow: theme.shadows[8] }}>
+            {/* <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden', boxShadow: theme.shadows[8] }}>
               <Table>
                 <TableHead>
                   <TableRow sx={{ bgcolor: isDark ? 'rgba(76,175,80,0.2)' : '#e8f5e8' }}>
@@ -1155,12 +1152,12 @@ const FarmersSuppliers = () => {
                   )}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </>
         )}
 
         {/* Edit Farmer Dialog */}
-        <Dialog open={editFarmerIdx !== null} onClose={() => setEditFarmerIdx(null)} maxWidth="md" fullWidth>
+        {/* <Dialog open={editFarmerIdx !== null} onClose={() => setEditFarmerIdx(null)} maxWidth="md" fullWidth>
           <DialogTitle sx={{ bgcolor: isDark ? 'rgba(33,150,243,0.1)' : '#e3f2fd', display: 'flex', alignItems: 'center' }}>
             <Avatar sx={{ bgcolor: '#2196f3', mr: 2 }}>✏️</Avatar>Edit Farmer
           </DialogTitle>
@@ -1305,10 +1302,10 @@ const FarmersSuppliers = () => {
               Save Changes
             </Button>
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
 
         {/* Edit Supplier Dialog */}
-        <Dialog open={editSupplierIdx !== null} onClose={() => setEditSupplierIdx(null)} maxWidth="md" fullWidth>
+        {/* <Dialog open={editSupplierIdx !== null} onClose={() => setEditSupplierIdx(null)} maxWidth="md" fullWidth>
           <DialogTitle sx={{ bgcolor: isDark ? 'rgba(76,175,80,0.1)' : '#e8f5e8', display: 'flex', alignItems: 'center' }}>
             <Avatar sx={{ bgcolor: '#4caf50', mr: 2 }}>✏️</Avatar>Edit Supplier
           </DialogTitle>
@@ -1441,7 +1438,7 @@ const FarmersSuppliers = () => {
               Save Changes
             </Button>
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
       </Box>
     </Box>
   );

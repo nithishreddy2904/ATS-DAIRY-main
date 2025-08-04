@@ -348,7 +348,7 @@ const Dashboard = () => {
     farmers, 
     suppliers, 
     milkEntries, 
-    inventoryItems, 
+    activeInventoryItems, 
     salesFromDB,           
     salesLoading,
     qualityTests,
@@ -366,7 +366,7 @@ const Dashboard = () => {
 
   // Calculate real-time metrics from filtered data
   const totalMilkCollection = filteredMilkEntries.reduce((sum, entry) => sum + parseFloat(entry.quantity || 0), 0);
-  const totalInventoryValue = inventoryItems.reduce((sum, item) => sum + parseFloat(item.quantity || 0), 0);
+  const totalInventoryValue = activeInventoryItems.reduce((sum, item) => sum + parseFloat(item.quantity || 0), 0);
   const activeFarmers = farmers.filter(f => f.status === 'Active').length;
   const activeSuppliers = suppliers.filter(s => s.status === 'Active').length;
 
@@ -483,7 +483,7 @@ const Dashboard = () => {
     },
     {
       title: 'Inventory Items',
-      value: inventoryItems.length.toString(),
+      value: activeInventoryItems.length.toString(),
       change: '+2.1%',
       trend: 'up',
       icon: <Star />,
@@ -550,39 +550,52 @@ const Dashboard = () => {
         width: '100%'
       }}>
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-          <Box>
-            <Typography variant="h4" fontWeight="900" sx={{ mb: 0, letterSpacing: '-2px', color: '#000000' }}>
-              Dairy Operations Dashboard
-            </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.8, mb: 0, fontWeight: 300, color: '#000000' }}>
-              Real-time business intelligence dashboard
-            </Typography>
-            <Tabs
-              value={tabIndex}
-              onChange={handleTabChange}
-              variant="scrollable"
-              scrollButtons="auto"
-              sx={{
-                '& .MuiTab-root': {
-                  color: '#000000',
-                  fontWeight: 200,
-                  minWidth: 120,
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px'
-                },
-                '& .Mui-selected': { color: '#333333 !important' },
-                '& .MuiTabs-indicator': { backgroundColor: '#000000', height: 3 }
-              }}
-            >
-              <Tab label="Daily" />
-              <Tab label="Weekly" />
-              <Tab label="Monthly" />
-              <Tab label="Quarterly" />
-            </Tabs>
-          </Box>
-          <Stack direction="row" spacing={1}>
-          </Stack>
-        </Stack>
+  {/* Centered Header Area */}
+  <Box sx={{ flex: 1 }}>
+    <Stack alignItems="center" spacing={0}>
+      <Typography
+        variant="h3"
+        fontWeight={900}
+        sx={{ mb: 0, letterSpacing: '-2px', color: '#000000' }}
+      >
+        Dairy Operations Dashboard
+      </Typography>
+      <Typography
+        variant="h5"
+        sx={{ opacity: 0.8, mb: 0, fontWeight: 300, color: '#000000' }}
+      >
+        Real-time business intelligence dashboard
+      </Typography>
+      <Tabs
+        value={tabIndex}
+        onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{
+          '& .MuiTab-root': {
+            color: '#000000',
+            fontWeight: 200,
+            minWidth: 80,
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          },
+          '& .Mui-selected': { color: '#333333 !important' },
+          '& .MuiTabs-indicator': { backgroundColor: '#000000', height: 3 }
+        }}
+      >
+        <Tab label="Daily" />
+        <Tab label="Weekly" />
+        <Tab label="Monthly" />
+        <Tab label="Quarterly" />
+      </Tabs>
+    </Stack>
+  </Box>
+          
+  {/* Placeholder for right-side content (Buttons, etc.) */}
+  <Stack direction="row" spacing={1}>
+    {/* Right side content */}
+  </Stack>
+</Stack>
       </Paper>
 
       {/* Scrollable Content */}

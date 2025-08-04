@@ -30,6 +30,13 @@ const farmerController = {
       }
 
       const farmer = await Farmer.create(req.body);
+
+      // Emit real-time event for creation - only if Socket.IO is available
+      const io = req.app.get('socketio');
+      if (io) {
+        io.emit('farmer:created', { action: 'create', data: farmer });
+      }
+
       res.status(201).json({
         success: true,
         data: farmer,
@@ -47,7 +54,13 @@ const farmerController = {
     try {
       const { id } = req.params;
       const farmer = await Farmer.update(id, req.body);
-      
+
+      // Emit real-time event for update
+      const io = req.app.get('socketio');
+      if (io) {
+        io.emit('farmer:updated', { action: 'update', data: farmer });
+      }
+
       res.json({
         success: true,
         data: farmer,
@@ -65,7 +78,13 @@ const farmerController = {
     try {
       const { id } = req.params;
       await Farmer.delete(id);
-      
+
+      // Emit real-time event for deletion
+      const io = req.app.get('socketio');
+      if (io) {
+        io.emit('farmer:deleted', { action: 'delete', data: { id } });
+      }
+
       res.json({
         success: true,
         message: 'Farmer deleted successfully'

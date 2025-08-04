@@ -36,20 +36,29 @@ const auditRoutes = require('./routes/audits');
 const documentRoutes = require('./routes/documents');
 const app = express();
 const PORT = process.env.PORT || 5000;
+const http = require('http'); 
+const { Server } = require('socket.io');
 
 // Security middleware
 app.use(helmet());
 app.use(compression());
 
 // CORS configuration
-app.use(cors({
-  // origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-  exposedHeaders: ['Authorization'],
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',    // Main ATS app
+    'http://localhost:3001',    // New admin dashboard
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
 
 // Logging middleware
 app.use(morgan('combined'));
@@ -184,16 +193,45 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
+
+
+// Create HTTP server based on Express app
+const server = http.createServer(app);
+
+// Create Socket.IO server, allow multiple local frontends (multi-app dev)
+const io = new Server(server, {
+  cors: {
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  }
+});
+
+// Make io available to other files via app.set if needed
+app.set('socketio', io);
+
+// Handle Socket.IO connections (customize as needed)
+io.on('connection', (socket) => {
+  console.log('Client connected:', socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+  });
+
+  // Example: Listen for events & broadcast (optional)
+  // socket.on('message', (msg) => {
+  //   io.emit('message', msg);
+  // });
+});
+
+// Start server (now with WebSocket support!)
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL}`);
-  console.log(`🔗 Test endpoints:`);
-  console.log(`   - http://localhost:${PORT}/api/test-db`);
-  console.log(`   - http://localhost:${PORT}/api/test-lab-quality-tests`);
-  console.log(`   - http://localhost:${PORT}/api/lab-quality-tests`);
+  console.log('🔗 Test endpoints:');
 });
+
 
 // Graceful shutdown
 process.on('SIGTERM', () => {

@@ -24,14 +24,12 @@ const supplierController = {
     try {
       const { id } = req.params;
       const supplier = await Supplier.getById(id);
-      
       if (!supplier) {
         return res.status(404).json({
           success: false,
           message: 'Supplier not found'
         });
       }
-
       res.json({
         success: true,
         data: supplier,
@@ -48,7 +46,6 @@ const supplierController = {
   // Create new supplier
   createSupplier: async (req, res) => {
     try {
-      // Check validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -59,6 +56,11 @@ const supplierController = {
       }
 
       const supplier = await Supplier.create(req.body);
+      
+      // Emit real-time event for creation
+      const io = req.app.get('socketio');
+      io.emit('supplier:created', { action: 'create', data: supplier });
+      
       res.status(201).json({
         success: true,
         data: supplier,
@@ -87,6 +89,10 @@ const supplierController = {
       const { id } = req.params;
       const supplier = await Supplier.update(id, req.body);
       
+      // Emit real-time event for update
+      const io = req.app.get('socketio');
+      io.emit('supplier:updated', { action: 'update', data: supplier });
+      
       res.json({
         success: true,
         data: supplier,
@@ -105,6 +111,10 @@ const supplierController = {
     try {
       const { id } = req.params;
       await Supplier.delete(id);
+      
+      // Emit real-time event for deletion
+      const io = req.app.get('socketio');
+      io.emit('supplier:deleted', { action: 'delete', data: { id } });
       
       res.json({
         success: true,
