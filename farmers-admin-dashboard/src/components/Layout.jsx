@@ -28,7 +28,8 @@ import {
   Agriculture as FarmersIcon,
   Business as SuppliersIcon,
   LocalDrink as MilkIcon,
-  Notifications as NotificationsIcon,
+   LocalShipping as FleetIcon,
+   Assignment as DeliveryIcon,
   ChevronLeft as ChevronLeftIcon,
   Settings as SettingsIcon,
   AccountCircle as AccountIcon,
@@ -84,7 +85,21 @@ const Layout = ({ children }) => {
     path: '/milk-entries',
     color: '#1565c0',
     bgColor: 'rgba(21, 101, 192, 0.1)'
-  }
+  },
+  {  
+    text: 'Fleet Management',
+    icon: <FleetIcon />,
+    path: '/fleet',
+    color: '#7b1fa2',
+    bgColor: 'rgba(123, 31, 162, 0.1)'
+  },
+  {
+  text: 'Deliveries',
+  icon: <DeliveryIcon />,
+  path: '/deliveries',
+  color: '#d32f2f',
+  bgColor: 'rgba(211, 47, 47, 0.1)'
+}
   ];
 
   const handleMenuClick = (path) => {

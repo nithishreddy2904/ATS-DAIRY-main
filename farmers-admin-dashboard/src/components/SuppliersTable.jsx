@@ -209,210 +209,256 @@ const SuppliersTable = () => {
   };
 
   const columns = [
-    {
-      field: 'id',
-      headerName: 'Supplier ID',
-      width: 120,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          size="small"
+  {
+    field: 'id',
+    headerName: 'Supplier ID',
+    width: 120,
+    renderCell: (params) => (
+      <Chip
+        label={params.value}
+        size="small"
+        sx={{
+          bgcolor: alpha(theme.palette.primary.main, 0.1),
+          color: theme.palette.primary.main,
+          fontWeight: 600,
+          fontFamily: 'monospace',
+          height: 24,      // Add explicit height for better vertical centering
+          lineHeight: 1
+        }}
+      />
+    )
+  },
+  {
+    field: 'companyName',
+    headerName: 'Company Name',
+    width: 220,
+    renderCell: (params) => (
+      <Stack direction="row" alignItems="center" spacing={1.5} sx={{ height: '100%' }}>
+        <Avatar
           sx={{
-            bgcolor: alpha(theme.palette.primary.main, 0.1),
-            color: theme.palette.primary.main,
-            fontWeight: 600,
-            fontFamily: 'monospace'
+            width: 32,
+            height: 32,
+            bgcolor: alpha(theme.palette.warning.main, 0.1),
+            color: theme.palette.warning.main,
+            fontSize: '0.875rem'
           }}
-        />
-      )
-    },
-    {
-      field: 'companyName',
-      headerName: 'Company Name',
-      width: 220,
-      renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1.5}>
-          <Avatar
-            sx={{
-              width: 32,
-              height: 32,
-              bgcolor: alpha(theme.palette.warning.main, 0.1),
-              color: theme.palette.warning.main,
-              fontSize: '0.875rem'
-            }}
-          >
-            <BusinessIcon fontSize="small" />
-          </Avatar>
-          <Box>
-            <Typography variant="body2" fontWeight={600} noWrap>
-              {params.value || 'N/A'}
-            </Typography>
-          </Box>
-        </Stack>
-      )
-    },
-    {
-      field: 'contactPerson',
-      headerName: 'Contact Person',
-      width: 180,
-      renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Avatar
-            sx={{
-              width: 28,
-              height: 28,
-              bgcolor: alpha(theme.palette.info.main, 0.1),
-              color: theme.palette.info.main,
-              fontSize: '0.75rem'
-            }}
-          >
-            {params.value?.charAt(0) || 'N'}
-          </Avatar>
-          <Typography variant="body2" fontWeight={500}>
+        >
+          <BusinessIcon fontSize="small" />
+        </Avatar>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="body2" fontWeight={600} noWrap>
             {params.value || 'N/A'}
           </Typography>
-        </Stack>
-      )
-    },
-    {
-      field: 'phone',
-      headerName: 'Phone',
-      width: 140,
-      renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <PhoneIcon sx={{ color: 'text.secondary', fontSize: 16 }} />
-          <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-            {params.value}
-          </Typography>
-        </Stack>
-      )
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 220,
-      renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <EmailIcon sx={{ color: 'text.secondary', fontSize: 16 }} />
-          <Typography variant="body2" color="text.secondary" noWrap>
-            {params.value}
-          </Typography>
-        </Stack>
-      )
-    },
-    {
-      field: 'address',
-      headerName: 'Location',
-      width: 200,
-      renderCell: (params) => (
-        <Tooltip title={params.value} arrow>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <LocationIcon sx={{ color: 'text.secondary', fontSize: 16 }} />
-            <Typography 
-              variant="body2" 
-              noWrap 
-              sx={{ 
-                maxWidth: 160,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}
-            >
-              {params.value}
-            </Typography>
-          </Stack>
-        </Tooltip>
-      )
-    },
-    {
-      field: 'supplierType',
-      headerName: 'Type',
-      width: 160,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          size="small"
+        </Box>
+      </Stack>
+    )
+  },
+  {
+    field: 'contactPerson',
+    headerName: 'Contact Person',
+    width: 180,
+    renderCell: (params) => (
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ height: '100%' }}>
+        <Avatar
           sx={{
-            bgcolor: alpha(getSupplierTypeColor(params.value), 0.1),
-            color: getSupplierTypeColor(params.value),
-            fontWeight: 600,
-            borderRadius: 1.5
+            width: 28,
+            height: 28,
+            bgcolor: alpha(theme.palette.info.main, 0.1),
+            color: theme.palette.info.main,
+            fontSize: '0.75rem',
+            lineHeight: 1
           }}
-        />
-      )
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 120,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={
-            params.value === 'Active' ? 'success' :
-            params.value === 'Inactive' ? 'error' : 'warning'
-          }
-          variant="filled"
-          size="small"
-          sx={{ 
-            fontWeight: 600,
-            borderRadius: 1.5
-          }}
-        />
-      )
-    },
-    {
-      field: 'joinDate',
-      headerName: 'Join Date',
-      width: 130,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params) => (
-        <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-          {params.value ? new Date(params.value).toLocaleDateString('en-IN') : 'N/A'}
+        >
+          {params.value?.charAt(0) || 'N'}
+        </Avatar>
+        <Typography variant="body2" fontWeight={500} sx={{ display: 'flex', alignItems: 'center' }}>
+          {params.value || 'N/A'}
         </Typography>
-      )
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 150,
-      getActions: (params) => [
-        <GridActionsCellItem
-          icon={
-            <Tooltip title="View Details">
-              <Visibility />
-            </Tooltip>
-          }
-          label="View"
-          color="primary"
-          onClick={() => handleView(params.row)}
-        />,
-        <GridActionsCellItem
-          icon={
-            <Tooltip title="Edit">
-              <Edit />
-            </Tooltip>
-          }
-          label="Edit"
-          color="warning"
-          onClick={() => handleEdit(params.row)}
-        />,
-        <GridActionsCellItem
-          icon={
-            <Tooltip title="Delete">
-              <Delete />
-            </Tooltip>
-          }
-          label="Delete"
-          color="error"
-          onClick={() => handleDelete(params.row)}
-        />
-      ]
-    }
-  ];
+      </Stack>
+    )
+  },
+  {
+    field: 'phone',
+    headerName: 'Phone',
+    width: 140,
+    renderCell: (params) => (
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ height: '100%' }}>
+        <PhoneIcon sx={{ color: 'text.secondary', fontSize: 16 }} />
+        <Typography variant="body2" sx={{ fontFamily: 'monospace', display: 'flex', alignItems: 'center' }}>
+          {params.value}
+        </Typography>
+      </Stack>
+    )
+  },
+  {
+    field: 'email',
+    headerName: 'Email',
+    width: 220,
+    renderCell: (params) => (
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ height: '100%' }}>
+        <EmailIcon sx={{ color: 'text.secondary', fontSize: 16 }} />
+        <Typography variant="body2" color="text.secondary" noWrap sx={{ display: 'flex', alignItems: 'center' }}>
+          {params.value}
+        </Typography>
+      </Stack>
+    )
+  },
+  {
+    field: 'address',
+    headerName: 'Location',
+    width: 200,
+    renderCell: (params) => (
+      <Tooltip title={params.value} arrow>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ height: '100%' }}>
+          <LocationIcon sx={{ color: 'text.secondary', fontSize: 16 }} />
+          <Typography
+            variant="body2"
+            noWrap
+            sx={{
+              maxWidth: 160,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            {params.value}
+          </Typography>
+        </Stack>
+      </Tooltip>
+    )
+  },
+  {
+  field: 'supplierType',
+  headerName: 'Type',
+  width: 160,
+  renderCell: (params) => (
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',  // vertical center wrapper
+        justifyContent: 'center',
+        width: '100%'
+      }}
+    >
+      <Chip
+        label={params.value}
+        size="small"
+        sx={{
+          bgcolor: alpha(getSupplierTypeColor(params.value), 0.1),
+          color: getSupplierTypeColor(params.value),
+          fontWeight: 600,
+          borderRadius: 1.5,
+          height: 24,
+          lineHeight: 1,
+          padding: '0 8px',
+          verticalAlign: 'middle',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: 0  // Ensure no margin to push chip vertical position
+        }}
+      />
+    </Box>
+  )
+},
+{
+  field: 'status',
+  headerName: 'Status',
+  width: 120,
+  align: 'center',
+  headerAlign: 'center',
+  renderCell: (params) => (
+    <Box
+      sx={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',  // vertical center wrapper
+        justifyContent: 'center',
+        width: '100%'
+      }}
+    >
+      <Chip
+        label={params.value}
+        color={
+          params.value === 'Active' ? 'success' :
+          params.value === 'Inactive' ? 'error' : 'warning'
+        }
+        variant="filled"
+        size="small"
+        sx={{
+          fontWeight: 600,
+          borderRadius: 1.5,
+          height: 24,
+          lineHeight: 1,
+          padding: '0 8px',
+          verticalAlign: 'middle',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: 0
+        }}
+      />
+    </Box>
+  )
+},
+
+  {
+    field: 'joinDate',
+    headerName: 'Join Date',
+    width: 130,
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Typography
+        variant="body2"
+        sx={{ fontFamily: 'monospace', display: 'flex', alignItems: 'center', height: '100%' }}
+      >
+        {params.value ? new Date(params.value).toLocaleDateString('en-IN') : 'N/A'}
+      </Typography>
+    )
+  },
+  {
+    field: 'actions',
+    type: 'actions',
+    headerName: 'Actions',
+    width: 150,
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={
+          <Tooltip title="View Details">
+            <Visibility />
+          </Tooltip>
+        }
+        label="View"
+        color="primary"
+        onClick={() => handleView(params.row)}
+      />,
+      <GridActionsCellItem
+        icon={
+          <Tooltip title="Edit">
+            <Edit />
+          </Tooltip>
+        }
+        label="Edit"
+        color="warning"
+        onClick={() => handleEdit(params.row)}
+      />,
+      <GridActionsCellItem
+        icon={
+          <Tooltip title="Delete">
+            <Delete />
+          </Tooltip>
+        }
+        label="Delete"
+        color="error"
+        onClick={() => handleDelete(params.row)}
+      />
+    ]
+  }
+];
+
 
   if (loading) {
     return (

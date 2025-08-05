@@ -13,7 +13,9 @@ import {
   Warning as WarningIcon,
   Agriculture as FarmersIcon,
   Business as SuppliersIcon,
-  LocalDrink as MilkIcon
+  LocalDrink as MilkIcon,
+  LocalShipping as FleetIcon,
+  Assignment as DeliveryIcon
 } from '@mui/icons-material';
 
 const DeleteConfirmDialog = ({ 
@@ -42,6 +44,20 @@ const DeleteConfirmDialog = ({
           icon: <MilkIcon />,
           title: 'Delete Milk Entry'
         };
+        case 'fleet':  
+      return {
+        name: `${item.vehicle_number || 'Unknown Vehicle'} - ${item.driver_name || 'Unknown Driver'}`,
+        id: item.id,
+        icon: <FleetIcon />,
+        title: 'Delete Fleet Record'
+      };
+      case 'delivery':
+  return {
+    name: `${item.destination || 'Unknown Destination'} - ${item.driver_name || 'Unknown Driver'}`,
+    id: `#${item.id}`,
+    icon: <DeliveryIcon />,
+    title: 'Delete Delivery'
+  };
       case 'farmer':
       default:
         return {

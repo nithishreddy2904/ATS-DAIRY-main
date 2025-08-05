@@ -56,8 +56,13 @@ const fleetController = {
           errors: errors.array()
         });
       }
+      
 
       const fleet = await FleetManagement.create(req.body);
+      const io = req.app.get('socketio');
+    if (io) {
+      io.emit('fleet:created', { action: 'create', data: fleet });
+    }
       res.status(201).json({
         success: true,
         data: fleet,
@@ -85,6 +90,10 @@ const fleetController = {
 
       const { id } = req.params;
       const fleet = await FleetManagement.update(id, req.body);
+      const io = req.app.get('socketio');
+    if (io) {
+      io.emit('fleet:updated', { action: 'update', data: fleet });
+    }
       res.json({
         success: true,
         data: fleet,
@@ -103,6 +112,10 @@ const fleetController = {
     try {
       const { id } = req.params;
       await FleetManagement.delete(id);
+      const io = req.app.get('socketio');
+    if (io) {
+      io.emit('fleet:deleted', { action: 'delete', data: { id } });
+    }
       res.json({
         success: true,
         message: 'Fleet record deleted successfully'

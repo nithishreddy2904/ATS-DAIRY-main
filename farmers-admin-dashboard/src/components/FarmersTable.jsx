@@ -188,93 +188,123 @@ const FarmersTable = () => {
   };
 
   const columns = [
-    { 
-      field: 'id', 
-      headerName: 'Farmer ID', 
-      width: 120,
-      renderCell: (params) => (
+  {
+    field: 'id',
+    headerName: 'Farmer ID',
+    width: 120,
+    renderCell: (params) => (
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%'
+        }}
+      >
         <Chip
           label={params.value}
           size="small"
           sx={{
             bgcolor: alpha(theme.palette.primary.main, 0.1),
             color: theme.palette.primary.main,
-            fontWeight: 600
+            fontWeight: 600,
+            height: 24,
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 0,
+            padding: '0 8px'
           }}
         />
-      )
-    },
-    { 
-      field: 'name', 
-      headerName: 'Name', 
-      width: 180,
-      renderCell: (params) => (
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Avatar
-            sx={{
-              width: 32,
-              height: 32,
-              bgcolor: alpha(theme.palette.success.main, 0.1),
-              color: theme.palette.success.main,
-              fontSize: '0.875rem'
-            }}
-          >
-            {params.value?.charAt(0)}
-          </Avatar>
-          <Typography variant="body2" fontWeight={500}>
-            {params.value}
-          </Typography>
-        </Stack>
-      )
-    },
-    { 
-      field: 'phone', 
-      headerName: 'Phone', 
-      width: 140,
-      renderCell: (params) => (
-        <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+      </Box>
+    )
+  },
+  {
+    field: 'name',
+    headerName: 'Name',
+    width: 180,
+    renderCell: (params) => (
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ height: '100%' }}>
+        <Avatar
+          sx={{
+            width: 32,
+            height: 32,
+            bgcolor: alpha(theme.palette.success.main, 0.1),
+            color: theme.palette.success.main,
+            fontSize: '0.875rem',
+            lineHeight: 1
+          }}
+        >
+          {params.value?.charAt(0)}
+        </Avatar>
+        <Typography variant="body2" fontWeight={500} sx={{ display: 'flex', alignItems: 'center' }}>
           {params.value}
         </Typography>
-      )
-    },
-    { 
-      field: 'email', 
-      headerName: 'Email', 
-      width: 220,
-      renderCell: (params) => (
-        <Typography variant="body2" color="text.secondary">
+      </Stack>
+    )
+  },
+  {
+    field: 'phone',
+    headerName: 'Phone',
+    width: 140,
+    renderCell: (params) => (
+      <Typography variant="body2" sx={{ fontFamily: 'monospace', display: 'flex', alignItems: 'center', height: '100%' }}>
+        {params.value}
+      </Typography>
+    )
+  },
+  {
+    field: 'email',
+    headerName: 'Email',
+    width: 220,
+    renderCell: (params) => (
+      <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+        {params.value}
+      </Typography>
+    )
+  },
+  {
+    field: 'address',
+    headerName: 'Address',
+    width: 200,
+    renderCell: (params) => (
+      <Tooltip title={params.value} arrow>
+        <Typography
+          variant="body2"
+          noWrap
+          sx={{
+            maxWidth: 180,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%'
+          }}
+        >
           {params.value}
         </Typography>
-      )
-    },
-    { 
-      field: 'address', 
-      headerName: 'Address', 
-      width: 200,
-      renderCell: (params) => (
-        <Tooltip title={params.value} arrow>
-          <Typography 
-            variant="body2" 
-            noWrap 
-            sx={{ 
-              maxWidth: 180,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
-          >
-            {params.value}
-          </Typography>
-        </Tooltip>
-      )
-    },
-    { 
-      field: 'cattle_count', 
-      headerName: 'Cattle Count', 
-      width: 120, 
-      type: 'number',
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params) => (
+      </Tooltip>
+    )
+  },
+  {
+    field: 'cattle_count',
+    headerName: 'Cattle Count',
+    width: 120,
+    type: 'number',
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: (params) => (
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%'
+        }}
+      >
         <Chip
           label={params.value}
           size="small"
@@ -282,85 +312,114 @@ const FarmersTable = () => {
             bgcolor: alpha(theme.palette.info.main, 0.1),
             color: theme.palette.info.main,
             fontWeight: 600,
-            minWidth: 50
+            minWidth: 50,
+            height: 24,
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 0,
+            padding: '0 8px'
           }}
         />
-      )
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 100,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => (
+      </Box>
+    )
+  },
+  {
+    field: 'status',
+    headerName: 'Status',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => (
+      <Box
+        sx={{
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%'
+        }}
+      >
         <Chip
           label={params.value}
           color={params.value === 'Active' ? 'success' : 'error'}
           variant="filled"
           size="small"
-          sx={{ 
+          sx={{
             fontWeight: 600,
-            borderRadius: 1.5
+            borderRadius: 1.5,
+            height: 24,
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 0,
+            padding: '0 8px'
           }}
         />
-      )
-    },
-    {
-      field: 'join_date',
-      headerName: 'Join Date',
-      headerAlign: 'center',
-      width: 130,
-      align: 'center',
-      renderCell: (params) => {
-        if (!params.value) return '';
-        const date = new Date(params.value);
-        return (
-          <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-            {date.toLocaleDateString('en-IN')}
-          </Typography>
-        );
-      }
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 150,
-      getActions: (params) => [
-        <GridActionsCellItem
-          icon={
-            <Tooltip title="View Details">
-              <Visibility />
-            </Tooltip>
-          }
-          label="View"
-          color="primary"
-          onClick={() => handleView(params.row)}
-        />,
-        <GridActionsCellItem
-          icon={
-            <Tooltip title="Edit">
-              <Edit />
-            </Tooltip>
-          }
-          label="Edit"
-          color="warning"
-          onClick={() => handleEdit(params.row)}
-        />,
-        <GridActionsCellItem
-          icon={
-            <Tooltip title="Delete">
-              <Delete />
-            </Tooltip>
-          }
-          label="Delete"
-          color="error"
-          onClick={() => handleDelete(params.row)}
-        />
-      ]
+      </Box>
+    )
+  },
+  {
+    field: 'join_date',
+    headerName: 'Join Date',
+    headerAlign: 'center',
+    width: 130,
+    align: 'center',
+    renderCell: (params) => {
+      if (!params.value) return null;
+      const date = new Date(params.value);
+      return (
+        <Typography
+          variant="body2"
+          sx={{ fontFamily: 'monospace', display: 'flex', alignItems: 'center', height: '100%' }}
+        >
+          {date.toLocaleDateString('en-IN')}
+        </Typography>
+      );
     }
-  ];
+  },
+  {
+    field: 'actions',
+    type: 'actions',
+    headerName: 'Actions',
+    width: 150,
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={
+          <Tooltip title="View Details">
+            <Visibility />
+          </Tooltip>
+        }
+        label="View"
+        color="primary"
+        onClick={() => handleView(params.row)}
+      />,
+      <GridActionsCellItem
+        icon={
+          <Tooltip title="Edit">
+            <Edit />
+          </Tooltip>
+        }
+        label="Edit"
+        color="warning"
+        onClick={() => handleEdit(params.row)}
+      />,
+      <GridActionsCellItem
+        icon={
+          <Tooltip title="Delete">
+            <Delete />
+          </Tooltip>
+        }
+        label="Delete"
+        color="error"
+        onClick={() => handleDelete(params.row)}
+      />
+    ]
+  }
+];
+
 
   if (loading) {
     return (

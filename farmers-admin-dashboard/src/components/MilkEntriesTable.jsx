@@ -206,42 +206,41 @@ const MilkEntriesTable = () => {
 
   // Columns definition - style & align as FarmersTable but with blue theming
   const columns = [
-    {
-      field: 'id',
-      headerName: 'Entry ID',
-      width: 100,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          size="small"
-          sx={{
-            bgcolor: alpha(theme.palette.info.main, 0.15),
-            color: theme.palette.info.main,
-            fontWeight: 'bold'
-          }}
-        />
-      )
-    },
+    // {
+    //   field: 'id',
+    //   headerName: 'Entry ID',
+    //   width: 100,
+    //   renderCell: (params) => (
+    //     <Chip
+    //       label={params.value}
+    //       size="small"
+    //       sx={{
+    //         bgcolor: alpha(theme.palette.info.main, 0.15),
+    //         color: theme.palette.info.main,
+    //         fontWeight: 'bold'
+    //       }}
+    //     />
+    //   )
+    // },
     {
       field: 'farmer_id',
       headerName: 'Farmer ID',
       width: 120,
-      renderCell: (params) => <Typography variant="body2">{params.value}</Typography>
+      renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+        {params.value}
+      </span>
+    ),
     },
     {
       field: 'farmer_name',
       headerName: 'Farmer Name',
-      width: 180,
-      renderCell: (params) => (
-        <Box display="flex" alignItems="center" gap={1}>
-          <Avatar sx={{ bgcolor: theme.palette.info.main, width: 32, height: 32 }}>
-            {params.value?.charAt(0).toUpperCase() || ''}
-          </Avatar>
-          <Typography variant="body2" noWrap>
-            {params.value}
-          </Typography>
-        </Box>
-      )
+      width: 150,
+     renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
+        {params.value}
+      </span>
+    ),
     },
     {
       field: 'date',
@@ -249,11 +248,11 @@ const MilkEntriesTable = () => {
       width: 130,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => {
-        if (!params.value) return '';
-        const date = new Date(params.value);
-        return date.toLocaleDateString('en-IN');
-      }
+      renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
+        {params.value ? new Date(params.value).toLocaleDateString('en-IN') : ''}
+      </span>
+    ),
     },
     {
       field: 'shift',
@@ -261,7 +260,11 @@ const MilkEntriesTable = () => {
       width: 100,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => <Typography variant="body2">{params.value || '-'}</Typography>
+      renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {params.value || '-'}
+      </span>
+    ),
     },
     {
       field: 'quantity',
@@ -271,10 +274,10 @@ const MilkEntriesTable = () => {
       align: 'right',
       headerAlign: 'right',
       renderCell: (params) => (
-        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-          {parseFloat(params.value || 0).toFixed(1)} L
-        </Typography>
-      )
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        {parseFloat(params.value || 0).toFixed(1)} L
+      </span>
+    ),
     },
     {
       field: 'quality',
@@ -283,16 +286,25 @@ const MilkEntriesTable = () => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params) => (
-        <Chip
-          label={params.value || 'N/A'}
-          size="small"
-          sx={{
-            bgcolor: alpha(getQualityColor(params.value), 0.15),
-            color: getQualityColor(params.value),
-            fontWeight: 600
-          }}
-        />
-      )
+    <span style={{
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Chip
+        label={params.value || 'N/A'}
+        size="small"
+        sx={{
+          bgcolor: alpha(getQualityColor(params.value), 0.15),
+          color: getQualityColor(params.value),
+          fontWeight: 600,
+          fontSize: 14
+        }}
+      />
+    </span>
+  )
     },
     {
       field: 'fat_content',
@@ -300,8 +312,11 @@ const MilkEntriesTable = () => {
       width: 90,
       align: 'right',
       headerAlign: 'right',
-      renderCell: (params) =>
-        params.value ? `${parseFloat(params.value).toFixed(1)}%` : 'N/A'
+      renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {params.value ? `${parseFloat(params.value).toFixed(1)}%` : 'N/A'}
+      </span>
+    ),
     },
     {
       field: 'temperature',
@@ -309,8 +324,11 @@ const MilkEntriesTable = () => {
       width: 100,
       align: 'right',
       headerAlign: 'right',
-      renderCell: (params) =>
-        params.value ? `${parseFloat(params.value).toFixed(1)}°C` : 'N/A'
+       renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        {params.value ? `${parseFloat(params.value).toFixed(1)}°C` : 'N/A'}
+      </span>
+    ),
     },
     {
       field: 'payment_amount',
@@ -318,8 +336,11 @@ const MilkEntriesTable = () => {
       width: 120,
       align: 'right',
       headerAlign: 'right',
-      renderCell: (params) =>
-        params.value ? `₹${parseFloat(params.value).toFixed(0)}` : 'N/A'
+      renderCell: (params) => (
+      <span style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        {params.value ? `₹${parseFloat(params.value).toFixed(0)}` : 'N/A'}
+      </span>
+    ),
     },
     {
       field: 'payment_status',
@@ -327,14 +348,25 @@ const MilkEntriesTable = () => {
       width: 100,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => (
-        <Chip
-          label={params.value || 'N/A'}
-          color={getPaymentStatusColor(params.value)}
-          size="small"
-          sx={{ fontWeight: 600 }}
-        />
-      )
+     renderCell: (params) => (
+    <span style={{
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Chip
+        label={params.value || 'N/A'}
+        color={getPaymentStatusColor(params.value)}
+        size="small"
+        sx={{
+          fontWeight: 600,
+          fontSize: 14
+        }}
+      />
+    </span>
+  ),
     },
     {
       field: 'actions',

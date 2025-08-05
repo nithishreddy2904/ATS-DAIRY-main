@@ -12,6 +12,8 @@ import FarmersTable from './components/FarmersTable';
 import SuppliersTable from './components/SuppliersTable';
 import Dashboard from './components/Dashboard';
 import MilkEntriesTable from './components/MilkEntriesTable';
+import FleetTable from './components/FleetTable';
+import DeliveriesTable from './components/DeliveriesTable';
 
 const theme = createTheme({
   palette: {
@@ -36,6 +38,8 @@ function App() {
             <Route path="/farmers" element={<FarmersTable />} />
             <Route path="/suppliers" element={<SuppliersTable />} />
             <Route path="/milk-entries" element={<MilkEntriesTable />} />
+            <Route path="/fleet" element={<FleetTable />} /> 
+            <Route path="/deliveries" element={<DeliveriesTable />} />
           </Routes>
         </Layout>
       </Router>
