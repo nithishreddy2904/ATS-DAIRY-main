@@ -16,7 +16,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 // Enhanced validation patterns
 const NAME_REGEX = /^[A-Za-z\s]+$/;

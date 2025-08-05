@@ -14,7 +14,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 // For charts
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 

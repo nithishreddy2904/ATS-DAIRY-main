@@ -4,9 +4,9 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProviderWrapper } from './context/ThemeContext';
 import { AppProvider } from './context/AppContext'; // Correct path
 import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
+import Login from './services/pages/Login';
+import Signup from './services/pages/Signup';
+import ForgotPassword from './services/pages/ForgotPassword';
 import DashboardApp from './DashboardApp';
 
 const App = () => {

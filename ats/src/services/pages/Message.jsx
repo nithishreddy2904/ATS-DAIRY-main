@@ -16,7 +16,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import { red } from '@mui/material/colors';
 // Validation regex patterns
 const FARMER_ID_REGEX = /^[A-Za-z]+[0-9]{4}$/;

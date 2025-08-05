@@ -11,7 +11,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import PeopleIcon from '@mui/icons-material/People';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 // Enhanced validation regex patterns
 const FARMER_ID_REGEX = /^FARM[0-9]{4}$/;

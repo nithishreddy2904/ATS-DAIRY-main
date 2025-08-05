@@ -13,7 +13,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import SpeedIcon from '@mui/icons-material/Speed';
 import { useTheme } from '@mui/material/styles';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from 'recharts';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import  { useMemo } from 'react';
 
 const VEHICLE_TYPES = ['Truck', 'Van', 'Bike', 'Refrigerated Truck'];

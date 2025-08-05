@@ -8,9 +8,9 @@ import {
   PersonAdd as SignupIcon 
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';  // Using your existing context
+import { useAuth } from '../../context/AuthContext';  // Using your existing context
 import { useTheme } from '@mui/material/styles';
-import atsLogo from '../assets/logo.png.png';
+import atsLogo from '../../assets/logo.png.png';
 
 const Signup = () => {
   const theme = useTheme();

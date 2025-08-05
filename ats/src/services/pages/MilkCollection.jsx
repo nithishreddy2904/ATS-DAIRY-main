@@ -13,7 +13,7 @@ import ThermostatIcon from '@mui/icons-material/Thermostat';
 import ScienceIcon from '@mui/icons-material/Science';
 import PaymentIcon from '@mui/icons-material/Payment';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 const MilkCollection = () => {
   const theme = useTheme();

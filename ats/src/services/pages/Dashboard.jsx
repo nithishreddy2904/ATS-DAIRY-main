@@ -14,9 +14,9 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
-import ReportGenerator from '../components/ReportGenerator';
+import ReportGenerator from '../../components/ReportGenerator';
 
 
 

@@ -18,7 +18,7 @@ import PendingIcon from '@mui/icons-material/Pending';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SecurityIcon from '@mui/icons-material/Security';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 
 // Enhanced validation patterns and constants
 const CERTIFICATE_ID_REGEX = /^[A-Z]{3}[0-9]{6}$/;

@@ -16,7 +16,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import CategoryIcon from '@mui/icons-material/Category';
 import { useTheme } from '@mui/material/styles';
-import { useAppContext } from '../context/AppContext'; // Corrected path
+import { useAppContext } from '../../context/AppContext'; 
 // For charts
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from 'recharts';
 

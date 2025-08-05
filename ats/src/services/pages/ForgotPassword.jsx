@@ -7,8 +7,8 @@ import {
 import { Email, Send, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import api from '../services/api';                 // ⬅️  NEW – shared Axios instance
-import atsLogo from '../assets/logo.png.png';
+import api from '../../services/api';                 
+import atsLogo from '../../assets/logo.png.png';
 
 const ForgotPassword = () => {
   const theme = useTheme();
