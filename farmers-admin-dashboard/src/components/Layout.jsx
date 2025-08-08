@@ -30,6 +30,7 @@ import {
   LocalDrink as MilkIcon,
    LocalShipping as FleetIcon,
    Assignment as DeliveryIcon,
+  Factory as FactoryIcon,
   ChevronLeft as ChevronLeftIcon,
   Settings as SettingsIcon,
   AccountCircle as AccountIcon,
@@ -99,7 +100,21 @@ const Layout = ({ children }) => {
   path: '/deliveries',
   color: '#d32f2f',
   bgColor: 'rgba(211, 47, 47, 0.1)'
-}
+},
+{
+  text: 'Processing Units',
+  icon: <FactoryIcon />,
+  path: '/processing-units',
+  color: '#0288d1',
+  bgColor: 'rgba(2, 136, 209, 0.08)'
+},
+{
+  text: "Production Batches",
+  icon: <FactoryIcon />,
+  path: "/production-batches",
+  color: "#388e3c",
+  bgColor: "rgba(56, 142, 60, 0.08)",
+},
   ];
 
   const handleMenuClick = (path) => {

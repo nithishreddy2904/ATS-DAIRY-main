@@ -15,7 +15,8 @@ import {
   Business as SuppliersIcon,
   LocalDrink as MilkIcon,
   LocalShipping as FleetIcon,
-  Assignment as DeliveryIcon
+  Assignment as DeliveryIcon,
+  Factory as FactoryIcon
 } from '@mui/icons-material';
 
 const DeleteConfirmDialog = ({ 
@@ -57,6 +58,20 @@ const DeleteConfirmDialog = ({
     id: `#${item.id}`,
     icon: <DeliveryIcon />,
     title: 'Delete Delivery'
+  };
+  case 'processingUnit':
+  return {
+    name: item.name || 'Unknown Unit',
+    id: item.unit_id || item.id,
+    icon: <FactoryIcon color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Processing Unit',
+  };
+  case "productionBatch":
+  return {
+    name: `${item.batchId || "Unknown Batch"} - ${item.product || "Unknown Product"}`,
+    id: item.id,
+    icon: <FactoryIcon />,
+    title: "Delete Production Batch",
   };
       case 'farmer':
       default:

@@ -14,6 +14,8 @@ import Dashboard from './components/Dashboard';
 import MilkEntriesTable from './components/MilkEntriesTable';
 import FleetTable from './components/FleetTable';
 import DeliveriesTable from './components/DeliveriesTable';
+import ProcessingUnitsTable from './components/ProcessingUnitsTable';
+import ProductionBatchesTable from "./components/ProductionBatchesTable";
 
 const theme = createTheme({
   palette: {
@@ -40,6 +42,8 @@ function App() {
             <Route path="/milk-entries" element={<MilkEntriesTable />} />
             <Route path="/fleet" element={<FleetTable />} /> 
             <Route path="/deliveries" element={<DeliveriesTable />} />
+            <Route path="/processing-units" element={<ProcessingUnitsTable />} />
+            <Route path="/production-batches" element={<ProductionBatchesTable />} />
           </Routes>
         </Layout>
       </Router>

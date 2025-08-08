@@ -17,6 +17,9 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import { useTheme } from '@mui/material/styles';
 import { useAppContext } from '../../context/AppContext';
+import { ToggleButtonGroup, ToggleButton } from '@mui/material';
+
+import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 // For charts
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from 'recharts';
 
@@ -329,12 +332,26 @@ const handleAddBatch = async (e) => {
     setEditBatchForm({ ...editBatchForm, [name]: value });
   };
 
-  const handleSaveEditBatch = async () => {
-    if (editBatchIdx !== null && !quantityError) {
-      await updateProductionBatch(editBatchIdx, editBatchForm);
+ const handleSaveEditBatch = async () => {
+  if (editBatchIdx !== null && !quantityError) {
+    try {
+      const updateData = {
+        batchId: editBatchForm.batchId,
+        unit: editBatchForm.unit,
+        product: editBatchForm.product,
+        quantity: parseFloat(editBatchForm.quantity),
+        date: editBatchForm.date,
+        status: editBatchForm.status,
+        quality: editBatchForm.quality || ''
+      };
+      await updateProductionBatch(editBatchIdx, updateData);
       setEditBatchIdx(null);
+    } catch (error) {
+      alert('Error updating batch: ' + (error?.message || 'Unknown error'));
     }
-  };
+  }
+};
+
 
   // Quality Control handlers - now using backend data
 const handleQualityChange = (e) => {
@@ -822,6 +839,29 @@ const handleSaveEditMaintenance = async () => {
                       {BATCH_STATUS.map(status => <MenuItem key={status} value={status}>{status}</MenuItem>)}
                     </TextField>
                   </Grid>
+                  <Grid item xs={12} md={6}>
+  <FormControl component="fieldset" fullWidth>
+    <FormLabel component="legend" sx={{ mb: 1 }}>Quality</FormLabel>
+    <ToggleButtonGroup
+      color="primary"
+      value={batchForm.quality}
+      exclusive
+      onChange={(event, newValue) => {
+        if (newValue !== null) {
+          setBatchForm(prev => ({ ...prev, quality: newValue }));
+        }
+      }}
+      aria-label="quality"
+      sx={{ width: '160px' }}
+    >
+      <ToggleButton value="A+">A+</ToggleButton>
+      <ToggleButton value="A">A</ToggleButton>
+      <ToggleButton value="B">B</ToggleButton>
+      <ToggleButton value="C">C</ToggleButton>
+    </ToggleButtonGroup>
+  </FormControl>
+</Grid>
+
                   <Grid item xs={12}>
                     <Button type="submit" variant="contained" size="large" sx={{ borderRadius: 3, px: 4, py: 1.5 }}
                       disabled={!!quantityError}>Add Production Batch</Button>
@@ -845,6 +885,7 @@ const handleSaveEditMaintenance = async () => {
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Quantity</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Date</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Quality</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -857,6 +898,7 @@ const handleSaveEditMaintenance = async () => {
                       <TableCell><Typography fontWeight="bold" color="success.main">{batch.quantity}</Typography></TableCell>
                       <TableCell>{formatDateTime(batch.date)}</TableCell>
                       <TableCell><Chip label={batch.status} color={batch.status === 'Completed' ? 'success' : batch.status === 'In Progress' ? 'warning' : 'info'} size="small" /></TableCell>
+                      <TableCell>{batch.quality || '-'}</TableCell>
                       <TableCell>
                         <Stack direction="row" spacing={1}>
                           <IconButton color="primary" onClick={() => handleEditBatch(idx)} sx={{ borderRadius: 2 }}><EditIcon /></IconButton>
@@ -902,6 +944,29 @@ const handleSaveEditMaintenance = async () => {
                       {BATCH_STATUS.map(status => <MenuItem key={status} value={status}>{status}</MenuItem>)}
                     </TextField>
                   </Grid>
+                  <Grid item xs={12} md={6}>
+  <FormControl component="fieldset" fullWidth>
+    <FormLabel component="legend" sx={{ mb: 1 }}>Quality</FormLabel>
+    <ToggleButtonGroup
+      color="primary"
+      value={editBatchForm.quality}
+      exclusive
+      onChange={(event, newValue) => {
+        if (newValue !== null) {
+          setEditBatchForm(prev => ({ ...prev, quality: newValue }));
+        }
+      }}
+      aria-label="quality"
+      sx={{ width: '160px' }}
+    >
+      <ToggleButton value="A+">A+</ToggleButton>
+      <ToggleButton value="A">A</ToggleButton>
+      <ToggleButton value="B">B</ToggleButton>
+      <ToggleButton value="C">C</ToggleButton>
+    </ToggleButtonGroup>
+  </FormControl>
+</Grid>
+
                 </Grid>
               </DialogContent>
               <DialogActions sx={{ p: 3 }}>
