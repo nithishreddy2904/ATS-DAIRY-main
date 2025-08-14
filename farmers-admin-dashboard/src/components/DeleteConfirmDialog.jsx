@@ -16,7 +16,10 @@ import {
   LocalDrink as MilkIcon,
   LocalShipping as FleetIcon,
   Assignment as DeliveryIcon,
-  Factory as FactoryIcon
+  Factory as FactoryIcon,
+  VerifiedUser as VerifiedUserIcon,
+  Build ,Store ,AttachMoney,Inventory2,
+  Person,Payment,Receipt    
 } from '@mui/icons-material';
 
 const DeleteConfirmDialog = ({ 
@@ -73,8 +76,64 @@ const DeleteConfirmDialog = ({
     icon: <FactoryIcon />,
     title: "Delete Production Batch",
   };
-      case 'farmer':
-      default:
+   case 'qualityControl':
+  return {
+    name: `${item.batch_id || 'Unknown Batch'} - ${item.inspector || 'Unknown Inspector'}`,
+    id: item.id,
+    icon: <VerifiedUserIcon color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Quality Control Record',
+  };
+  case 'maintenance':
+  return {
+    name: `${item.unit_id || 'Unknown Unit'} - ${item.type || 'Unknown Type'}`,
+    id: item.id,
+    icon: <Build color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Maintenance Record',
+  };
+  case 'retailer':
+  return {
+    name: `${item.name || 'Unknown Retailer'} - ${item.location || 'Unknown Location'}`,
+    id: item.id,
+    icon: <Store color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Retailer',
+  };
+  case 'sale':
+  return {
+    name: `${item.retailer || 'Unknown Retailer'} - ₹${Number(item.amount || 0).toLocaleString()}`,
+    id: item.id,
+    icon: <AttachMoney color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Sale Record',
+  };
+  case 'inventory':
+  return {
+    name: `${item.item_name || 'Unknown Item'} (${item.item_code || 'No Code'})`,
+    id: item.id,
+    icon: <Inventory2 color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Inventory Item',
+  };
+  case 'employee':
+  return {
+    name: `${item.name || 'Unknown Employee'} (${item.employee_id || item.id || 'No ID'})`,
+    id: item.id,
+    icon: <Person color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Employee',
+  };
+  case 'payment':
+  return {
+    name: `${item.farmer_id || 'Unknown Farmer'} - ₹${Number(item.amount || 0).toLocaleString()}`,
+    id: item.id,
+    icon: <Payment color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Payment Record',
+  };
+  case 'bill':
+  return {
+    name: `${item.bill_id || 'Unknown Bill'} - ${item.farmer_id || 'Unknown Farmer'}`,
+    id: item.id,
+    icon: <Receipt color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Bill',
+  };
+  case 'farmer':
+  default:
         return {
           name: item.name || 'Unknown Farmer',
           id: item.id,

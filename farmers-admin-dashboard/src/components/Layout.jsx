@@ -31,10 +31,13 @@ import {
    LocalShipping as FleetIcon,
    Assignment as DeliveryIcon,
   Factory as FactoryIcon,
+  VerifiedUser as VerifiedUserIcon,
   ChevronLeft as ChevronLeftIcon,
   Settings as SettingsIcon,
   AccountCircle as AccountIcon,
-  Brightness6 as ThemeIcon
+  Brightness6 as ThemeIcon,
+  Build,Store,AttachMoney,Inventory2,
+  Person,Payment,Receipt  
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import atsLogo from '../assets/logo.png.png';
@@ -114,6 +117,62 @@ const Layout = ({ children }) => {
   path: "/production-batches",
   color: "#388e3c",
   bgColor: "rgba(56, 142, 60, 0.08)",
+},
+{
+  text: 'Quality Control',
+  icon: <VerifiedUserIcon />,
+  path: '/quality-control',
+  color: '#f57c00',
+  bgColor: 'rgba(245, 124, 0, 0.1)',
+},
+{
+  text: 'Maintenance',
+  icon: <Build />,
+  path: '/maintenance',
+  color: '#7b1fa2',
+  bgColor: 'rgba(123, 31, 162, 0.1)',
+},
+{
+  text: 'Retailers',
+  icon: <Store />,
+  path: '/retailers',
+  color: '#6c63ff',
+  bgColor: 'rgba(108, 99, 255, 0.1)',
+},
+ {
+  text: 'Sales Records',
+  icon: <AttachMoney />,
+  path: '/sales',
+  color: '#4caf50',
+  bgColor: 'rgba(76, 175, 80, 0.1)',
+},
+{
+  text: 'Inventory Records',
+  icon: <Inventory2 />,
+  path: '/inventory',
+  color: '#2196f3',
+  bgColor: 'rgba(33, 150, 243, 0.1)',
+},
+{
+  text: 'Employee Directory',
+  icon: <Person />,
+  path: '/employees',
+  color: '#009688',
+  bgColor: 'rgba(0, 150, 136, 0.1)',
+},
+{
+  text: 'Payment Records',
+  icon: <Payment />,
+  path: '/payments',
+  color: '#8e24aa',
+  bgColor: 'rgba(142, 36, 170, 0.1)',
+},
+{
+  text: 'Bills & Invoices',
+  icon: <Receipt />,
+  path: '/bills',
+  color: '#8e24aa',
+  bgColor: 'rgba(142, 36, 170, 0.1)',
 },
   ];
 

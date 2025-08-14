@@ -16,6 +16,15 @@ import FleetTable from './components/FleetTable';
 import DeliveriesTable from './components/DeliveriesTable';
 import ProcessingUnitsTable from './components/ProcessingUnitsTable';
 import ProductionBatchesTable from "./components/ProductionBatchesTable";
+import QualityControlTable from './components/QualityControlTable';
+import MaintenanceTable from './components/MaintenanceTable';
+import RetailersTable from './components/RetailersTable';
+import SalesTable from './components/SalesTable';
+import InventoryTable from './components/InventoryTable';
+import EmployeesTable from './components/EmployeesTable';
+import PaymentsTable from './components/PaymentsTable';
+import BillsTable from './components/BillsTable';
+
 
 const theme = createTheme({
   palette: {
@@ -44,6 +53,14 @@ function App() {
             <Route path="/deliveries" element={<DeliveriesTable />} />
             <Route path="/processing-units" element={<ProcessingUnitsTable />} />
             <Route path="/production-batches" element={<ProductionBatchesTable />} />
+            <Route path="/quality-control" element={<QualityControlTable />} />
+            <Route path="/maintenance" element={<MaintenanceTable />} />
+            <Route path="/retailers" element={<RetailersTable />} />
+            <Route path="/sales" element={<SalesTable />} />
+            <Route path="/inventory" element={<InventoryTable />} />
+            <Route path="/employees" element={<EmployeesTable />} />
+            <Route path="/payments" element={<PaymentsTable />} />
+            <Route path="/bills" element={<BillsTable />} />
           </Routes>
         </Layout>
       </Router>
