@@ -21,6 +21,7 @@ import {
   InputAdornment,
   Card,
   CardContent,
+  LinearProgress,
 } from '@mui/material';
 import {
   Visibility,
@@ -28,140 +29,141 @@ import {
   Delete,
   Search,
   Refresh,
-  Receipt,
+  VerifiedUser,
   Warning,
   CheckCircle,
   Schedule,
   Error,
+  Assignment,
 } from '@mui/icons-material';
 
-import billService from '../services/billService';
+import complianceService from '../services/complianceService';
 import useSocket from '../hooks/useSocket';
-import ViewBillModal from './ViewBillModal';
-import EditBillModal from './EditBillModal';
+import ViewComplianceModal from './ViewComplianceModal';
+import EditComplianceModal from './EditComplianceModal';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 
-const PURPLE = "#8e24aa"; // Same as Payments page
+const BLUE = "#2196f3"; // Same as Compliance page
 
-const BillsTable = () => {
+const ComplianceTable = () => {
   const theme = useTheme();
-  const [bills, setBills] = useState([]);
-  const [filteredBills, setFilteredBills] = useState([]);
+  const [complianceRecords, setComplianceRecords] = useState([]);
+  const [filteredRecords, setFilteredRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState('');
 
-  const [selectedBill, setSelectedBill] = useState(null);
+  const [selectedRecord, setSelectedRecord] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const socket = useSocket('http://localhost:5000');
 
-  const loadBills = async () => {
+  const loadComplianceRecords = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await billService.getAllBills();
-      let billsData = [];
+      const response = await complianceService.getAllRecords();
+      let recordsData = [];
       if (response && response.data) {
-        billsData = Array.isArray(response.data) ? response.data : [];
+        recordsData = Array.isArray(response.data) ? response.data : [];
       } else if (Array.isArray(response)) {
-        billsData = response;
+        recordsData = response;
       }
-      setBills(billsData);
-      setFilteredBills(billsData);
+      setComplianceRecords(recordsData);
+      setFilteredRecords(recordsData);
     } catch (err) {
-      console.error('Error loading bills:', err);
-      setError(`Failed to load bills: ${err.message}`);
-      setBills([]);
-      setFilteredBills([]);
+      console.error('Error loading compliance records:', err);
+      setError(`Failed to load compliance records: ${err.message}`);
+      setComplianceRecords([]);
+      setFilteredRecords([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadBills();
+    loadComplianceRecords();
   }, []);
 
   useEffect(() => {
     if (searchText) {
-      const filtered = bills.filter(bill =>
-        Object.values(bill).some(
+      const filtered = complianceRecords.filter(record =>
+        Object.values(record).some(
           value =>
             value &&
             value.toString().toLowerCase().includes(searchText.toLowerCase())
         )
       );
-      setFilteredBills(filtered);
+      setFilteredRecords(filtered);
     } else {
-      setFilteredBills(bills);
+      setFilteredRecords(complianceRecords);
     }
-  }, [searchText, bills]);
+  }, [searchText, complianceRecords]);
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('bill:created', payload => {
-      setBills(prev => [payload.data, ...prev]);
+    socket.on('compliance:created', payload => {
+      setComplianceRecords(prev => [payload.data, ...prev]);
     });
-    socket.on('bill:updated', payload => {
-      setBills(prev =>
-        prev.map(bill => (bill.id === payload.data.id ? payload.data : bill))
+    socket.on('compliance:updated', payload => {
+      setComplianceRecords(prev =>
+        prev.map(record => (record.id === payload.data.id ? payload.data : record))
       );
     });
-    socket.on('bill:deleted', payload => {
-      setBills(prev => prev.filter(bill => bill.id !== payload.data.id));
+    socket.on('compliance:deleted', payload => {
+      setComplianceRecords(prev => prev.filter(record => record.id !== payload.data.id));
     });
 
     return () => {
-      socket.off('bill:created');
-      socket.off('bill:updated');
-      socket.off('bill:deleted');
+      socket.off('compliance:created');
+      socket.off('compliance:updated');
+      socket.off('compliance:deleted');
     };
   }, [socket]);
 
-  const handleView = bill => {
-    setSelectedBill(bill);
+  const handleView = record => {
+    setSelectedRecord(record);
     setViewModalOpen(true);
   };
 
-  const handleEdit = bill => {
-    setSelectedBill(bill);
+  const handleEdit = record => {
+    setSelectedRecord(record);
     setEditModalOpen(true);
   };
 
-  const handleDelete = bill => {
-    setSelectedBill(bill);
+  const handleDelete = record => {
+    setSelectedRecord(record);
     setDeleteDialogOpen(true);
   };
 
-  const handleEditSave = async updatedBill => {
+  const handleEditSave = async updatedRecord => {
     try {
-      if (updatedBill.id) {
-        await billService.updateBill(updatedBill.id, updatedBill);
+      if (updatedRecord.id && complianceRecords.find(r => r.id === updatedRecord.id)) {
+        await complianceService.updateRecord(updatedRecord.id, updatedRecord);
       } else {
-        await billService.createBill(updatedBill);
+        await complianceService.createRecord(updatedRecord);
       }
-      await loadBills();
+      await loadComplianceRecords();
       setEditModalOpen(false);
-      setSelectedBill(null);
+      setSelectedRecord(null);
     } catch (err) {
-      console.error('Error saving bill:', err);
-      alert('Error saving bill: ' + err.message);
+      console.error('Error saving compliance record:', err);
+      alert('Error saving compliance record: ' + err.message);
     }
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      await billService.deleteBill(selectedBill.id);
-      await loadBills();
+      await complianceService.deleteRecord(selectedRecord.id);
+      await loadComplianceRecords();
       setDeleteDialogOpen(false);
-      setSelectedBill(null);
+      setSelectedRecord(null);
     } catch (err) {
-      console.error('Error deleting bill:', err);
-      alert('Error deleting bill: ' + err.message);
+      console.error('Error deleting compliance record:', err);
+      alert('Error deleting compliance record: ' + err.message);
     }
   };
 
@@ -176,7 +178,7 @@ const BillsTable = () => {
   };
 
   const isOverdue = (dueDate, status) => {
-    if (status === 'Paid') return false;
+    if (status === 'Compliant') return false;
     const today = new Date();
     const due = new Date(dueDate);
     return due < today;
@@ -184,19 +186,31 @@ const BillsTable = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'Paid': return <CheckCircle />;
-      case 'Overdue': return <Error />;
-      case 'Partially Paid': return <Warning />;
-      case 'Unpaid': return <Schedule />;
-      default: return <Receipt />;
+      case 'Compliant': return <CheckCircle />;
+      case 'Non-Compliant': return <Error />;
+      case 'Under Review': return <Schedule />;
+      case 'Pending': return <Warning />;
+      case 'Expired': return <Error />;
+      case 'Renewed': return <CheckCircle />;
+      default: return <Assignment />;
+    }
+  };
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'Critical': return '#d32f2f';
+      case 'High': return '#f57c00';
+      case 'Medium': return '#1976d2';
+      case 'Low': return '#388e3c';
+      default: return '#757575';
     }
   };
 
   const columns = [
   { 
-    field: 'bill_id', 
-    headerName: 'Bill ID', 
-    width: 130,
+    field: 'id', 
+    headerName: 'Record ID', 
+    width: 120,
     renderCell: params => (
       <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
         <Typography variant="body2" fontFamily="monospace" fontWeight="medium">
@@ -206,38 +220,62 @@ const BillsTable = () => {
     )
   },
   { 
-    field: 'farmer_id', 
-    headerName: 'Farmer ID', 
-    width: 130,
+    field: 'type', 
+    headerName: 'Compliance Type', 
+    width: 180,
     renderCell: params => (
       <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <Typography variant="body2" fontFamily="monospace">
+        <Chip 
+          label={params.value} 
+          size="small"
+          sx={{ 
+            bgcolor: alpha(BLUE, 0.1),
+            color: BLUE,
+            fontWeight: 'medium'
+          }}
+        />
+      </Box>
+    )
+  },
+  { 
+    field: 'title', 
+    headerName: 'Title', 
+    width: 200,
+    renderCell: params => (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+        <Typography variant="body2" fontWeight="medium">
           {params.value}
         </Typography>
       </Box>
     )
   },
   { 
-    field: 'amount', 
-    headerName: 'Amount', 
-    width: 130,
+    field: 'responsible_department', 
+    headerName: 'Department', 
+    width: 150,
     renderCell: params => (
       <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <Typography variant="body2" fontWeight="bold" color="error.main">
-          ₹{Number(params.value || 0).toLocaleString()}
+        <Typography variant="body2">
+          {params.value}
         </Typography>
       </Box>
     )
   },
   { 
-    field: 'bill_date', 
-    headerName: 'Bill Date', 
-    width: 130,
+    field: 'priority', 
+    headerName: 'Priority', 
+    width: 100,
     renderCell: params => (
       <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <Typography variant="body2">
-          {formatDateTime(params.value)}
-        </Typography>
+        <Chip 
+          label={params.value} 
+          size="small"
+          sx={{ 
+            bgcolor: alpha(getPriorityColor(params.value), 0.1),
+            color: getPriorityColor(params.value),
+            fontWeight: 'bold'
+          }}
+        />
       </Box>
     )
   },
@@ -246,13 +284,13 @@ const BillsTable = () => {
     headerName: 'Due Date', 
     width: 130,
     renderCell: params => {
-      const isOverdueItem = isOverdue(params.value, params.row.status);
+      const overdue = isOverdue(params.value, params.row.status);
       return (
         <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           <Typography 
             variant="body2" 
-            color={isOverdueItem ? 'error.main' : 'text.primary'}
-            fontWeight={isOverdueItem ? 'bold' : 'normal'}
+            color={overdue ? 'error.main' : 'text.primary'}
+            fontWeight={overdue ? 'bold' : 'normal'}
           >
             {formatDateTime(params.value)}
           </Typography>
@@ -261,56 +299,55 @@ const BillsTable = () => {
     }
   },
   { 
-    field: 'category', 
-    headerName: 'Category', 
-    width: 150,
-    renderCell: params => (
-      <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <Chip 
-          label={params.value} 
-          size="small"
-          sx={{ 
-            bgcolor: alpha(PURPLE, 0.1),
-            color: PURPLE,
-            fontWeight: 'medium'
-          }}
-        />
-      </Box>
-    )
-  },
-  { 
     field: 'status', 
     headerName: 'Status', 
     width: 140,
     renderCell: params => {
-      const isOverdueItem = isOverdue(params.row.due_date, params.value);
-      const status = isOverdueItem && params.value === 'Unpaid' ? 'Overdue' : params.value;
-      const color = 
-        status === 'Paid' ? 'success' :
-        status === 'Overdue' ? 'error' :
-        status === 'Partially Paid' ? 'warning' : 'default';
+      const color =
+        params.value === 'Compliant' ? 'success' :
+        (params.value === 'Non-Compliant' || params.value === 'Expired') ? 'error' :
+        params.value === 'Under Review' ? 'info' : 'warning';
+
       return (
         <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           <Chip 
-            label={status} 
+            label={params.value} 
             color={color} 
             size="small"
             variant="outlined"
-            icon={getStatusIcon(status)}
+            icon={getStatusIcon(params.value)}
           />
         </Box>
       );
     }
   },
   { 
-    field: 'created_at', 
-    headerName: 'Created Date', 
-    width: 140,
+    field: 'assigned_to', 
+    headerName: 'Assigned To', 
+    width: 150,
     renderCell: params => (
       <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
         <Typography variant="body2">
-          {params.value ? new Date(params.value).toLocaleDateString('en-IN') : ''}
+          {params.value}
         </Typography>
+      </Box>
+    )
+  },
+  { 
+    field: 'risk_level', 
+    headerName: 'Risk Level', 
+    width: 120,
+    renderCell: params => (
+      <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+        <Chip 
+          label={params.value} 
+          size="small"
+          sx={{ 
+            bgcolor: alpha(getPriorityColor(params.value), 0.1),
+            color: getPriorityColor(params.value),
+            fontWeight: 'medium'
+          }}
+        />
       </Box>
     )
   },
@@ -328,11 +365,11 @@ const BillsTable = () => {
 ];
 
 
-  // StatCard component with purple accent
+  // StatCard component with blue accent
   const StatsCard = ({ title, value, icon, color, alert = false }) => (
     <Card
       sx={{
-        bgcolor: alert ? alpha(theme.palette.error.main, 0.08) : alpha(PURPLE, 0.08),
+        bgcolor: alert ? alpha(theme.palette.error.main, 0.08) : alpha(BLUE, 0.08),
         borderRadius: 2,
         boxShadow: 0,
         minWidth: 160,
@@ -344,11 +381,11 @@ const BillsTable = () => {
         border: alert ? `1px solid ${theme.palette.error.main}` : 'none'
       }}
     >
-      <Avatar sx={{ bgcolor: alert ? theme.palette.error.main : PURPLE, color: "#fff", mr: 1 }}>
+      <Avatar sx={{ bgcolor: alert ? theme.palette.error.main : BLUE, color: "#fff", mr: 1 }}>
         {icon}
       </Avatar>
       <Box>
-        <Typography variant="h6" sx={{ color: alert ? theme.palette.error.main : PURPLE }}>
+        <Typography variant="h6" sx={{ color: alert ? theme.palette.error.main : BLUE }}>
           {value}
         </Typography>
         <Typography variant="body2" color="text.secondary">{title}</Typography>
@@ -365,30 +402,35 @@ const BillsTable = () => {
   }
 
   // Calculate stats
-  const totalBills = bills.reduce((sum, bill) => sum + Number(bill.amount || 0), 0);
-  const paidBills = bills.filter(b => b.status === 'Paid').length;
-  const unpaidBills = bills.filter(b => b.status === 'Unpaid').length;
-  const overdueBills = bills.filter(b => isOverdue(b.due_date, b.status)).length;
+  const totalRecords = complianceRecords.length;
+  const compliantRecords = complianceRecords.filter(r => r.status === 'Compliant').length;
+  const pendingRecords = complianceRecords.filter(r => r.status === 'Pending').length;
+  const overdueRecords = complianceRecords.filter(r => isOverdue(r.due_date, r.status)).length;
+  const criticalRecords = complianceRecords.filter(r => r.priority === 'Critical').length;
+
 
   return (
     <Box p={2}>
-      {/* Purple header bar with icon and title */}
+      {/* Blue header bar with icon and title */}
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <Receipt sx={{ color: PURPLE, fontSize: 32, mr: 1 }} />
-        <Typography variant="h4" sx={{ color: PURPLE, fontWeight: 600 }}>
-          Bills & Invoices
+        <VerifiedUser sx={{ color: BLUE, fontSize: 32, mr: 1 }} />
+        <Typography variant="h4" sx={{ color: BLUE, fontWeight: 600 }}>
+          Compliance Records
         </Typography>
       </Box>
 
-      {/* Overdue bills alert */}
-      {overdueBills > 0 && (
+       
+
+      {/* Compliance alerts */}
+      {(overdueRecords > 0 || criticalRecords > 0) && (
         <Alert 
           severity="warning" 
           sx={{ mb: 2 }}
           icon={<Warning />}
         >
           <Typography variant="body2">
-            {overdueBills} bill(s) are overdue and require immediate attention.
+            {overdueRecords > 0 && `${overdueRecords} record(s) are overdue. `}
+            {criticalRecords > 0 && `${criticalRecords} critical priority item(s) require attention.`}
           </Typography>
         </Alert>
       )}
@@ -397,34 +439,34 @@ const BillsTable = () => {
       <Grid container spacing={2} mb={2} alignItems="stretch">
         <Grid item xs={12} sm={3}>
           <StatsCard
-            title="Total Bills"
-            value={`₹${(totalBills / 1000).toFixed(0)}K`}
-            icon={<Receipt />}
-            color={PURPLE}
+            title="Total Records"
+            value={totalRecords}
+            icon={<Assignment />}
+            color={BLUE}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
           <StatsCard
-            title="Paid Bills"
-            value={paidBills}
+            title="Compliant"
+            value={compliantRecords}
             icon={<CheckCircle />}
-            color={PURPLE}
+            color={BLUE}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
           <StatsCard
-            title="Unpaid Bills"
-            value={unpaidBills}
+            title="Pending"
+            value={pendingRecords}
             icon={<Schedule />}
-            color={PURPLE}
+            color={BLUE}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
           <StatsCard
-            title="Overdue Bills"
-            value={overdueBills}
+            title="Overdue"
+            value={overdueRecords}
             icon={<Error />}
-            alert={overdueBills > 0}
+            alert={overdueRecords > 0}
           />
         </Grid>
       </Grid>
@@ -434,7 +476,7 @@ const BillsTable = () => {
         <TextField
           variant="outlined"
           size="small"
-          placeholder="Search bills..."
+          placeholder="Search compliance records..."
           value={searchText}
           onChange={e => setSearchText(e.target.value)}
           InputProps={{
@@ -451,7 +493,7 @@ const BillsTable = () => {
           }}
         />
           <Tooltip title="Refresh Data">
-            <IconButton onClick={loadBills}>
+            <IconButton onClick={loadComplianceRecords}>
               <Refresh />
             </IconButton>
           </Tooltip>
@@ -461,7 +503,7 @@ const BillsTable = () => {
 
       <Paper sx={{ height: 500 }}>
         <DataGrid
-          rows={filteredBills}
+          rows={filteredRecords}
           columns={columns}
           getRowId={row => row.id}
           disableSelectionOnClick
@@ -474,31 +516,37 @@ const BillsTable = () => {
             if (isOverdue(params.row.due_date, params.row.status)) {
               return 'row-overdue';
             }
+            if (params.row.priority === 'Critical') {
+              return 'row-critical';
+            }
             return '';
           }}
           sx={{
             '& .row-overdue': {
               backgroundColor: alpha(theme.palette.error.main, 0.1),
             },
+            '& .row-critical': {
+              backgroundColor: alpha(theme.palette.warning.main, 0.1),
+            },
           }}
         />
       </Paper>
 
-      <ViewBillModal
+      <ViewComplianceModal
         open={viewModalOpen}
-        bill={selectedBill}
+        record={selectedRecord}
         onClose={() => setViewModalOpen(false)}
       />
-      <EditBillModal
+      <EditComplianceModal
         open={editModalOpen}
-        bill={selectedBill}
+        record={selectedRecord}
         onSave={handleEditSave}
         onClose={() => setEditModalOpen(false)}
       />
       <DeleteConfirmDialog
         open={deleteDialogOpen}
-        item={selectedBill}
-        itemType="bill"
+        item={selectedRecord}
+        itemType="compliance"
         onConfirm={handleDeleteConfirm}
         onClose={() => setDeleteDialogOpen(false)}
       />
@@ -506,4 +554,4 @@ const BillsTable = () => {
   );
 };
 
-export default BillsTable;
+export default ComplianceTable;

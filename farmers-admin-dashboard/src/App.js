@@ -24,7 +24,13 @@ import InventoryTable from './components/InventoryTable';
 import EmployeesTable from './components/EmployeesTable';
 import PaymentsTable from './components/PaymentsTable';
 import BillsTable from './components/BillsTable';
-
+import ComplianceTable from './components/ComplianceTable';
+import CertificationsTable from './components/CertificationsTable';
+import AuditsTable from './components/AuditsTable';
+import DocumentsTable from './components/DocumentsTable';
+import QualityTestTable from './components/QualityTestTable';
+import CustomerReviewsTable from './components/CustomerReviewsTable';
+import FarmerFeedbackTable from './components/FarmerFeedbackTable';
 
 const theme = createTheme({
   palette: {
@@ -61,6 +67,13 @@ function App() {
             <Route path="/employees" element={<EmployeesTable />} />
             <Route path="/payments" element={<PaymentsTable />} />
             <Route path="/bills" element={<BillsTable />} />
+            <Route path="/compliance" element={<ComplianceTable />} />
+            <Route path="/certifications" element={<CertificationsTable />} />
+            <Route path="/audits" element={<AuditsTable />} />
+            <Route path="/documents" element={<DocumentsTable />} />
+            <Route path="/quality-tests" element={<QualityTestTable />} />
+            <Route path="/customer-reviews" element={<CustomerReviewsTable />} />
+            <Route path="/farmer-feedback" element={<FarmerFeedbackTable />} />
           </Routes>
         </Layout>
       </Router>

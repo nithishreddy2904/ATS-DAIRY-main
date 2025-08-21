@@ -37,7 +37,9 @@ import {
   AccountCircle as AccountIcon,
   Brightness6 as ThemeIcon,
   Build,Store,AttachMoney,Inventory2,
-  Person,Payment,Receipt  
+  Person,Payment,Receipt,VerifiedUser,
+  Verified,Assessment,InsertDriveFile,
+  Science,Star,Agriculture        
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import atsLogo from '../assets/logo.png.png';
@@ -173,6 +175,55 @@ const Layout = ({ children }) => {
   path: '/bills',
   color: '#8e24aa',
   bgColor: 'rgba(142, 36, 170, 0.1)',
+},
+{
+  text: 'Compliance Records',
+  icon: <VerifiedUser />,
+  path: '/compliance',
+  color: '#2196f3',
+  bgColor: 'rgba(33, 150, 243, 0.1)',
+},
+{
+  text: 'Active Certifications',
+  icon: <Verified />,
+  path: '/certifications',
+  color: '#4caf50',
+  bgColor: 'rgba(76, 175, 80, 0.1)',
+},
+{
+  text: 'Audit Records',
+  icon: <Assessment />,
+  path: '/audits',
+  color: '#ff9800',
+  bgColor: 'rgba(255, 152, 0, 0.1)',
+},
+  {
+    text : 'Document Library',
+    icon : <InsertDriveFile />,        
+    path : '/documents',
+    color: '#9c27b0',
+    bgColor: 'rgba(156, 39, 176, 0.1)',
+  },
+  {
+  text: 'Quality Test Records',
+  icon: <Science />,
+  path: '/quality-tests',
+  color: '#4caf50',
+  bgColor: 'rgba(76, 175, 80, 0.1)',
+},
+{
+  text: 'Customer Reviews',
+  icon: <Star />,
+  path: '/customer-reviews',
+  color: '#2196f3',
+  bgColor: 'rgba(33, 150, 243, 0.1)',
+},
+{
+  text: 'Farmer Feedback',
+  icon: <Agriculture />,
+  path: '/farmer-feedback',
+  color: '#4caf50',
+  bgColor: 'rgba(76, 175, 80, 0.1)',
 },
   ];
 

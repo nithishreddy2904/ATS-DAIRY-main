@@ -19,7 +19,9 @@ import {
   Factory as FactoryIcon,
   VerifiedUser as VerifiedUserIcon,
   Build ,Store ,AttachMoney,Inventory2,
-  Person,Payment,Receipt    
+  Person,Payment,Receipt,VerifiedUser,
+  Verified,Assessment,InsertDriveFile,
+  Science,Star,Agriculture         
 } from '@mui/icons-material';
 
 const DeleteConfirmDialog = ({ 
@@ -131,6 +133,55 @@ const DeleteConfirmDialog = ({
     id: item.id,
     icon: <Receipt color="primary" sx={{ fontSize: 40 }} />,
     title: 'Delete Bill',
+  };
+  case 'compliance':
+  return {
+    name: `${item.title || 'Unknown Record'} (${item.id || 'No ID'})`,
+    id: item.id,
+    icon: <VerifiedUser color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Compliance Record',
+  };
+  case 'certification':
+  return {
+    name: `${item.name || 'Unknown Certification'} (${item.certificate_number || item.id || 'No ID'})`,
+    id: item.id,
+    icon: <Verified color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Certification',
+  };
+  case 'audit':
+  return {
+    name: `${item.audit_type || 'Unknown Audit'} - ${item.auditor || 'Unknown Auditor'}`,
+    id: item.id,
+    icon: <Assessment color="primary" sx={{ fontSize: 40 }} />,
+    title: 'Delete Audit Record',
+  };
+    case 'document':
+    return {
+      name : item.name || 'Unknown Document',
+      id   : item.id,
+      icon : <InsertDriveFile sx={{ color:'#9c27b0' }}/>,
+      title: 'Delete Document'
+    };
+    case 'qualityTest':
+  return {
+    name: `${item.batch_id || 'Unknown Batch'} - ${item.sample_id || 'Unknown Sample'}`,
+    id: item.id,
+    icon: <Science sx={{ color: '#4caf50' }} />,
+    title: 'Delete Quality Test'
+  };
+  case 'review':
+  return {
+    name: `${item.subject || 'Unknown Subject'} - ${item.customer_name || 'Unknown Customer'}`,
+    id: item.id,
+    icon: <Star sx={{ color: '#2196f3' }} />,
+    title: 'Delete Customer Review'
+  };
+  case 'farmerFeedback':
+  return {
+    name: `${item.feedback_type || 'Unknown Type'} - ${item.farmer_name || 'Unknown Farmer'}`,
+    id: item.id,
+    icon: <Agriculture sx={{ color: '#4caf50' }} />,
+    title: 'Delete Farmer Feedback'
   };
   case 'farmer':
   default:
