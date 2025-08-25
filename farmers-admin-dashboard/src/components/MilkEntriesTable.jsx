@@ -625,13 +625,13 @@ const MilkEntriesTable = () => {
         />
       )}
       {selectedMilkEntry && (
-        <DeleteConfirmDialog
-          open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}
-          onConfirm={handleDeleteConfirm}
-          title="Delete Milk Entry"
-          description={`Are you sure you want to delete milk entry ID ${selectedMilkEntry.id}?`}
-        />
+       <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        item={selectedMilkEntry}
+        itemType="milk_entry"
+        onConfirm={handleDeleteConfirm}
+        onClose={() => setDeleteDialogOpen(false)}
+      />
       )}
     </Box>
   );

@@ -39,7 +39,8 @@ import {
   Build,Store,AttachMoney,Inventory2,
   Person,Payment,Receipt,VerifiedUser,
   Verified,Assessment,InsertDriveFile,
-  Science,Star,Agriculture        
+  Science,Star,Agriculture,Message,
+  Announcement,Group          
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import atsLogo from '../assets/logo.png.png';
@@ -225,6 +226,27 @@ const Layout = ({ children }) => {
   color: '#4caf50',
   bgColor: 'rgba(76, 175, 80, 0.1)',
 },
+{
+  text: 'Message History',
+  icon: <Message />,
+  path: '/message-history',
+  color: '#2196f3',
+  bgColor: 'rgba(33, 150, 243, 0.1)',
+},
+{
+  text: 'Announcement History',
+  icon: <Announcement />,
+  path: '/announcement-history',
+  color: '#4caf50',
+  bgColor: 'rgba(76, 175, 80, 0.1)',
+},
+{
+    text: 'Group Conversations',
+    icon: <Group />,
+    path: '/group-conversations',
+    color: '#4caf50',
+    bgColor: 'rgba(156, 39, 176, 0.1)',
+  },
   ];
 
   const handleMenuClick = (path) => {

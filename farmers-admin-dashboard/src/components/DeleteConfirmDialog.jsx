@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -21,7 +20,8 @@ import {
   Build ,Store ,AttachMoney,Inventory2,
   Person,Payment,Receipt,VerifiedUser,
   Verified,Assessment,InsertDriveFile,
-  Science,Star,Agriculture         
+  Science,Star,Agriculture,Message,
+  Announcement,Group            
 } from '@mui/icons-material';
 
 const DeleteConfirmDialog = ({ 
@@ -46,7 +46,7 @@ const DeleteConfirmDialog = ({
         case 'milkEntry':
         return {
           name: `${item.farmer_name || 'Unknown Farmer'} - ${item.quantity || 0}L`,
-          id: `#${item.id}`,
+          id: item.farmer_id,
           icon: <MilkIcon />,
           title: 'Delete Milk Entry'
         };
@@ -58,12 +58,12 @@ const DeleteConfirmDialog = ({
         title: 'Delete Fleet Record'
       };
       case 'delivery':
-  return {
-    name: `${item.destination || 'Unknown Destination'} - ${item.driver_name || 'Unknown Driver'}`,
-    id: `#${item.id}`,
-    icon: <DeliveryIcon />,
-    title: 'Delete Delivery'
-  };
+     return {
+       name: `${item.destination || 'Unknown Destination'} - ${item.driver_name || 'Unknown Driver'}`,
+       id: item.id,
+       icon: <DeliveryIcon />,
+       title: 'Delete Delivery'
+      };
   case 'processingUnit':
   return {
     name: item.name || 'Unknown Unit',
@@ -183,6 +183,27 @@ const DeleteConfirmDialog = ({
     icon: <Agriculture sx={{ color: '#4caf50' }} />,
     title: 'Delete Farmer Feedback'
   };
+  case 'message':
+  return {
+    name: `${item.subject || 'Unknown Subject'} - ${item.farmer_id || 'Unknown Farmer'}`,
+    id: item.id,
+    icon: <Message sx={{ color: '#2196f3' }} />,
+    title: 'Delete Message'
+  };
+  case 'announcement':
+  return {
+    name: `${item.title || 'Unknown Title'}`,
+    id: item.id,
+    icon: <Announcement sx={{ color: '#4caf50' }} />,
+    title: 'Delete Announcement'
+  };
+  case 'groupMessage':
+        return {
+          name: `${item.group_name || item.groupName || 'Unknown Group'} - ${item.sender_name || item.senderName || 'Unknown Sender'}`,
+          id: item.id,
+          icon: <Group />,
+          title: 'Delete Group Message'
+        };
   case 'farmer':
   default:
         return {

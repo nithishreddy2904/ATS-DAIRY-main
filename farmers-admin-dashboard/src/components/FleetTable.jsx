@@ -535,10 +535,10 @@ const FleetTable = () => {
       />
       <DeleteConfirmDialog
         open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
+        item={selectedFleet}
+        itemType="fleet"
         onConfirm={handleDeleteConfirm}
-        title="Confirm Delete Fleet"
-        content="Are you sure you want to delete this fleet record?"
+        onClose={() => setDeleteDialogOpen(false)}
       />
     </Box>
   );

@@ -648,8 +648,8 @@ const FarmersTable = () => {
       
       <DeleteConfirmDialog
         open={deleteDialogOpen}
-        title="Delete Farmer"
-        message={`Are you sure you want to delete farmer "${selectedFarmer?.name}"? This action cannot be undone.`}
+        item={selectedFarmer}
+        itemType="farmer"
         onConfirm={handleDeleteConfirm}
         onClose={() => setDeleteDialogOpen(false)}
       />

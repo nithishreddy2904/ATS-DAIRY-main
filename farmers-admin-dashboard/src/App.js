@@ -31,6 +31,9 @@ import DocumentsTable from './components/DocumentsTable';
 import QualityTestTable from './components/QualityTestTable';
 import CustomerReviewsTable from './components/CustomerReviewsTable';
 import FarmerFeedbackTable from './components/FarmerFeedbackTable';
+import MessageHistoryTable from './components/MessageHistoryTable';
+import AnnouncementHistoryTable from './components/AnnouncementHistoryTable';
+import GroupConversationsTable from './components/GroupConversationsTable';
 
 const theme = createTheme({
   palette: {
@@ -74,6 +77,9 @@ function App() {
             <Route path="/quality-tests" element={<QualityTestTable />} />
             <Route path="/customer-reviews" element={<CustomerReviewsTable />} />
             <Route path="/farmer-feedback" element={<FarmerFeedbackTable />} />
+            <Route path="/message-history" element={<MessageHistoryTable />} />
+            <Route path="/announcement-history" element={<AnnouncementHistoryTable />} />
+            <Route path="/group-conversations" element={<GroupConversationsTable />} />
           </Routes>
         </Layout>
       </Router>

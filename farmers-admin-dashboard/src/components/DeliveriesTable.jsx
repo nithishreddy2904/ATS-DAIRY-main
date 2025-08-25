@@ -379,12 +379,11 @@ const DeliveriesTable = () => {
           color="warning"
           onClick={() => handleEdit(params.row)}
         />,
-        <GridActionsCellItem
-          icon={<Delete />}
-          label="Delete"
-          color="error"
-          onClick={() => handleDelete(params.row)}
-        />
+        <GridActionsCellItem 
+        icon={<Delete color="error" />} 
+        label="Delete" 
+        onClick={() => handleDelete(params.row)} />
+        
       ],
     }
   ];
@@ -532,10 +531,10 @@ const DeliveriesTable = () => {
       />
       <DeleteConfirmDialog
         open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
+        item={selectedDelivery}
+        itemType="Delivery"
         onConfirm={handleDeleteConfirm}
-        title="Confirm Delete Delivery"
-        content="Are you sure you want to delete this delivery record?"
+        onClose={() => setDeleteDialogOpen(false)}
       />
     </Box>
   );

@@ -687,8 +687,8 @@ const SuppliersTable = () => {
       
       <DeleteConfirmDialog
         open={deleteDialogOpen}
-        title="Delete Supplier"
-        message={`Are you sure you want to delete supplier "${selectedSupplier?.companyName}"? This action cannot be undone.`}
+        item={selectedSupplier}
+        itemType="supplier"
         onConfirm={handleDeleteConfirm}
         onClose={() => setDeleteDialogOpen(false)}
       />
